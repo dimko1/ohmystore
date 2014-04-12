@@ -8,7 +8,11 @@
         "grunt": "0.4.1",
         "sails-disk": "~0.9.0",
         "ejs": "0.8.4",
-        "optimist": "0.3.4"
+        "optimist": "0.3.4",
+        "ohmyapk" : "*",
+        "xmlbuilder": "2.2.1",
+        "bplist-parser": "0.0.5",
+        "adm-zip": "0.4.4"
     },
     "scripts": {
         "start": "node app.js",
