@@ -1,2 +1,0 @@
-# ohmystore
-### a Sails application
