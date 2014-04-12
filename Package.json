@@ -1,0 +1,27 @@
+{
+  "name": "ohmystore",
+  
+  "description": "Simple nodejs server for cerating basic enterprise mobile application stores",
+  
+  "author": {
+    "name": "Dima Maleev",
+    "email": "diwingless@gmail.com",
+    "url" : "maleevdimka.wordpress.com"
+    },
+  
+  "dependencies": {
+    "underscore": ">= 1.6.0",
+    "ohmyapk": "0.2.0",
+    "bplist-parser": "0.0.5",
+    "xmlbuilder": "2.1.0",
+    "adm-zip": ">=0.4.4",
+    "mongoose": "latest",
+    "mkdirp": "latest",
+    "watch": "0.9.0",
+    "express": "3.5.1"
+  },
+
+  "engines" : {
+    "node": ">= 0.8.0"
+  }
+}
