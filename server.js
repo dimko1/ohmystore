@@ -8,6 +8,6 @@ var db = mongoose.connect(config.db);
 var express_app = require('./server/config/express_bootstrap');
 express_app.start(config);
 
-
+var file_watcher = require('./server/filewatcher/file_watcher');
 
 console.log(config.db);

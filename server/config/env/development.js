@@ -2,6 +2,6 @@
 
 module.exports = {
 	db: 'mongodb://localhost/db',
-	port: '8080',
+	port: '8081',
 	ssl_port : '443'
 }
