@@ -3,7 +3,8 @@ var chokidar = require('chokidar')
 	,fs = require('fs')
 	,path = require('path')
 	,util = require('util')
-	,fileinfo_controller = require('./../fileinfocollector/fileinfo_collector').FileInfoCollector;
+	,fileinfo_controller = require('./../fileinfocollector/fileinfo_collector').FileInfoCollector
+  ,io = require('./../utils/utils.io.js').IOUtils;
 
 
 //create watcher for temp folder
@@ -21,8 +22,26 @@ watcher
     //for example in cases when file is uploaded throgh networ
     var fileUploaded = function(){
       util.log('File upload completed.');
-      var fi = new fileinfo_controller(filepath);
-      fi.parseFile();
+
+      var from = filepath;
+      //create new path to file
+      var to = './processing/' + path.basename(filepath);
+
+      //copy file for processing
+      io.copyFile(from, to, function(ex){
+
+        if (ex){
+          console.log('file copy failed:' + ex);
+          return;
+        }
+
+        fs.unwatchFile(filepath);
+
+        io.deleteFile(from);
+        onFileUploadCompleted(to);
+        observed_file = '';
+        console.log('completed');
+      });
     };
 
     var timerHit = setTimeout(fileUploaded, 5000);
@@ -39,3 +58,14 @@ watcher
     });
 });
 
+function onFileUploadCompleted(path){
+  //add event called even if file removed :(
+  if (!fs.existsSync(path)){
+    util.log('File not exist. probably delete operation');
+    return;
+  }
+
+  //start file collection engine
+  var fi = new fileinfo_controller(path);
+  fi.parseFile();
+}
