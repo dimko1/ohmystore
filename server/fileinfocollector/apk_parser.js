@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 /**
  * Constructor
  * @param {[string]} path to file 
@@ -12,6 +14,17 @@ var ApkParser = function(){
  */
 ApkParser.prototype.parseFile = function(filepath, callback) {
 	console.log('Parse apk file called');
+
+	if (!fs.existsSync(filepath)){
+		util.log('file not exist:' + filepath + '    .finishing operation');
+		return;
+	}
+
+	var parseApk = require('ohmyapk');
+	
+	parseApk(filepath, function (err, data) {
+		callback(err,data);
+	});
 };
 
 module.exports.ApkParser = new ApkParser();
