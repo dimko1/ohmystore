@@ -53,8 +53,11 @@ FileInfoCollector.prototype.parseFile = function() {
     switch(fileType){
       case 'ios':
         ios_parser.parseFile(this.filename, function(err,res){
-        
-
+          
+          if (err) return util.log(err);
+          
+          console.log(res);
+          
         });
         return;
       case 'android':
