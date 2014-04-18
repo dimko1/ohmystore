@@ -74,5 +74,38 @@ var IOUtils = function(){};
     callback();
   };
 
+  /**
+  * generating of the unique filenam for storing application name
+  * @param  {String}   filename basic file name
+  * @param  {Function} callback function which will be called when filename will be generated
+  */
+  IOUtils.prototype.generateFileName = function(filename, callback){
+    var folderName = path.dirname(filename);
+ 
+    var generateFileName = function(){
+     
+      var filePath = filename.substring(0, filename.lastIndexOf('.'));
+  
+      var fileExtension = filename.substring(filename.lastIndexOf('.') + 1);
+      var generatedName = filePath + '.' + fileExtension;
+  
+      console.log(generatedName);
+  
+      var fileIndex = 1;
+      while(true){
+        if (fs.existsSync(generatedName)){
+          generatedName = filePath + fileIndex + '.' + fileExtension;
+          fileIndex++;
+        } else {
+          break;
+        }
+      }
+ 
+      callback(generatedName);
+    };
+
+    this.createFolder(folderName, generateFileName);
+  };
+
 //---------------EXPORTS----------------//
 module.exports.IOUtils = new IOUtils();
