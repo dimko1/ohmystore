@@ -24,31 +24,6 @@ FileInfoCollector.prototype.filename = '';
 
 FileInfoCollector.prototype.parseFile = function() {
 
-  var getFileType = function(filename){
-    var filePath = filename;
-
-    //check if file exist
-    if (!fs.existsSync(filePath)){
-      util.log('file not exist:' + filePath + ' .finishing operation');
-      return;
-    }
-
-    //get file extension
-    var fileExtension = filename.substring(filename.lastIndexOf('.') + 1);
-
-    switch(fileExtension){
-    case 'ipa':
-      util.log('Apple file type detected');
-      return 'ios';
-    case 'apk':
-      util.log('Android file type detected');
-      return 'android';
-    default:
-      util.log('Unknown file type');
-      return '';
-    }
-  };
-
   //function for saving information about file to the db
   var saveFileInfo = function(fileInfo){
     
@@ -118,6 +93,37 @@ function processBuild(app, current_filename){
     });
   });
 }
+
+
+/**
+ * helper function to get file type : is it apk or ipa
+ * @param  {String} filePath path to the file
+ * @return {String}          in case file extension is ipa - ios, in case apk - android
+ */
+function getFileType(filePath){
+
+  //check if file exist
+  if (!fs.existsSync(filePath)){
+    util.log('file not exist:' + filePath + ' .finishing operation');
+    return;
+  }
+
+  //get file extension
+  var fileExtension = filename.substring(filename.lastIndexOf('.') + 1);
+
+  switch(fileExtension){
+  case 'ipa':
+    util.log('Apple file type detected');
+    return 'ios';
+  case 'apk':
+    util.log('Android file type detected');
+    return 'android';
+  default:
+    util.log('Unknown file type');
+    return '';
+  }
+}
+
 
 /**
  * helper function used to build object with info about ios application
