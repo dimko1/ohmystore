@@ -76,17 +76,7 @@ FileInfoCollector.prototype.parseFile = function() {
 
         var app = parseIpaFileInformation(res);
 
-        var destination = generateFileName(app);
-
-        io.generateFileName(destination, function(filename){
-          io.copyFile(current_file, filename, function(){
-            app.filename = filename;
-
-            console.log(app);
-
-            fs.unlink(current_file);
-          });
-        });
+        processBuild(app, current_file);
 
         console.log(res);
       });
@@ -94,7 +84,12 @@ FileInfoCollector.prototype.parseFile = function() {
 
     case 'android':
       apk_parser.parseFile(this.filename, function(err,res){
+        
         if (err) return util.log(err);
+
+        var app = parseApkFileInformation(res);
+
+        processBuild(app, current_file);
         
         console.log(res);
       });
@@ -103,7 +98,29 @@ FileInfoCollector.prototype.parseFile = function() {
 };
 
 /**
- * helper function used to build object with info about
+ * helper function which generates name for the application file,
+ * copies it to specific location and removing file from processing folder
+ * @param  {Object} app              Object with information about application
+ * @param  {String} current_filename Path to file in processingf folder
+ */
+function processBuild(app, current_filename){
+  
+  var destination = generateFileName(app);
+
+  io.generateFileName(destination, function(filename){
+    io.copyFile(current_filename, filename, function(){
+      
+      app.filename = filename;
+
+      console.log(app);
+
+      fs.unlink(current_filename);
+    });
+  });
+}
+
+/**
+ * helper function used to build object with info about ios application
  * @param  {Array} data  array with information received from ipa_parser
  * @return {Object}      Application model, used by mongoose
  */
@@ -118,7 +135,25 @@ function parseIpaFileInformation(data){
   });
 
   return application;
-}
+};
+
+/**
+ * helper function used to build object with info about android applicaton
+ * @param  {Array} data  array with information received from ipa_parser
+ * @return {Object}      Application model, used by mongoose
+ */
+function parseApkFileInformation(data){
+  var fileObject = data.manifest[0];
+
+  var application = new appModel({
+    title: fileObject['@package'],
+    type: 'android',
+    version: fileObject['@android:versionName'],
+    filename:''
+  });
+
+  return application;
+};
 
 /**
  * just utility function for generating name of the file using info about parsed applications
