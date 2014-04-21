@@ -9,7 +9,6 @@ var fs = require('fs');
  * @param  {Function} callback function which will be called when plist file is created
  */
 function creatPlist(name, path, title, callback){
-	//var doc = builder.create();
 
 	var d = xml.create('plist', {'version':'1.0'})
 		.ele('dict')
@@ -41,7 +40,7 @@ function creatPlist(name, path, title, callback){
 	.end({ pretty: true});
 
 	//generate unique file path:) use this for now.
-	var filePath = './processing/file.plist';
+	var filePath = './processing/file' + new Date().getMilliseconds() + '.plist';
 
 	fs.writeFile(filePath, d, function(err){
 		callback(err,filePath);
