@@ -87,8 +87,11 @@ function processBuild(app, current_filename){
       
       app.filename = filename;
 
+      app.save(function(err,application){
+        if (err) return console.log(err);
+      });
+      
       console.log(app);
-
       fs.unlink(current_filename);
     });
   });
@@ -109,7 +112,7 @@ function getFileType(filePath){
   }
 
   //get file extension
-  var fileExtension = filename.substring(filename.lastIndexOf('.') + 1);
+  var fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1);
 
   switch(fileExtension){
   case 'ipa':
