@@ -22,7 +22,7 @@ module.exports = function(passport){
     });
   });
 
-
+  //usage of the local storage
   passport.use('login', new localStrategy({
     usernameField:'email',
     passwordField:'password',
@@ -40,7 +40,7 @@ module.exports = function(passport){
       //check password
       if (!user.validPassword(password))
         return callback(null, false, req.flash('logineMessage', 'Incorrect password'));
-    
+
       //success!
       return callback(null, user);
     });

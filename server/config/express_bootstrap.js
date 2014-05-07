@@ -32,7 +32,7 @@ function start(config){
 	app.use(express.static(path.join(__dirname, 'public')));
 
 	
-	require('./routes/routes.js')(app, passport);
+	require('./../routes/routes.js')(app, passport);
 
 	//SSL required to deploy application for iOS starting 7.1
 	//can be self signed during development

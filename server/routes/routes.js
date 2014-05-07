@@ -31,7 +31,7 @@ module.exports = function(app, passport){
   //==========================================
   //LOGOUT 
   //==========================================
-  //Processes logout message
+  //Pуrocesses logout message
   app.get('/profile', isLoggedIn, function(req,res){
   	res.logout();
   	res.redirect('profile.ejs');
