@@ -12,7 +12,7 @@ var fs = require('fs')
  * @param {string} path - parameter which shows path to the file which should be parsed
  */
 var FileInfoCollector = function(path){
-	this.filename = path;
+	  this.filename = path;
 };
 
 /**
@@ -24,52 +24,50 @@ FileInfoCollector.prototype.filename = '';
 
 FileInfoCollector.prototype.parseFile = function() {
 
-  //function for saving information about file to the db
-  var saveFileInfo = function(fileInfo){
+    //function for saving information about file to the db
+    var saveFileInfo = function(fileInfo){
+        appModel.title = fileInfo.title;
+        appModel.type = fileInfo.type;
+        appModel.version = fileInfo.version;
+        appModel.filename = fileInfo.filename;
     
+        appModel.save(function(err,application){
+            if (err) return console.log(err);
+        });
+    };
 
-    appModel.title = fileInfo.title;
-    appModel.type = fileInfo.type;
-    appModel.version = fileInfo.version;
-    appModel.filename = fileInfo.filename;
-
-    appModel.save(function(err,application){
-      if (err) return console.log(err);
-    });
-  };
-
-	//get type of the file
-	var fileType = getFileType(this.filename);
-  var current_file = this.filename;
-
-  switch(fileType){
-    case 'ios':
-      
-      ios_parser.parseFile(this.filename, function(err,res){
-        
-        if (err) return util.log(err);
-
-        var app = parseIpaFileInformation(res);
-
-        processBuild(app, current_file);
-
-        console.log(res);
-      });
-      return;
-
-    case 'android':
-      apk_parser.parseFile(this.filename, function(err,res){
-        
-        if (err) return util.log(err);
-
-        var app = parseApkFileInformation(res);
-
-        processBuild(app, current_file);
-        
-        console.log(res);
-      });
-      return;
-  }
+	  //get type of the file
+	  var fileType = getFileType(this.filename);
+    var current_file = this.filename;
+  
+    switch(fileType){
+        case 'ios':
+          
+            ios_parser.parseFile(this.filename, function(err,res){
+            
+                if (err) return util.log(err);
+    
+                var app = parseIpaFileInformation(res);
+    
+                processBuild(app, current_file);
+    
+                console.log(res);
+            });
+            return;
+    
+        case 'android':
+            apk_parser.parseFile(this.filename, function(err,res){
+            
+                if (err) return util.log(err);
+    
+                var app = parseApkFileInformation(res);
+    
+                processBuild(app, current_file);
+            
+                console.log(res);
+            });
+            return;
+      }  
 };
 
 /**
@@ -80,19 +78,19 @@ FileInfoCollector.prototype.parseFile = function() {
  */
 function processBuild(app, current_filename){
   
-  var destination = generateFileName(app);
+    var destination = generateFileName(app);
 
-  io.generateFileName(destination, function(filename){
-    io.copyFile(current_filename, filename, function(){
+    io.generateFileName(destination, function(filename){
+        io.copyFile(current_filename, filename, function(){
       
-      app.filename = filename;
+        app.filename = filename;
 
-      app.save(function(err,application){
-        if (err) return console.log(err);
-      });
+        app.save(function(err,application){
+            if (err) return console.log(err);
+        });
       
-      console.log(app);
-      fs.unlink(current_filename);
+        console.log(app);
+        fs.unlink(current_filename);
     });
   });
 }
@@ -104,27 +102,26 @@ function processBuild(app, current_filename){
  * @return {String}          in case file extension is ipa - ios, in case apk - android
  */
 function getFileType(filePath){
-
-  //check if file exist
-  if (!fs.existsSync(filePath)){
-    util.log('file not exist:' + filePath + ' .finishing operation');
+    //check if file exist
+    if (!fs.existsSync(filePath)){
+        util.log('file not exist:' + filePath + ' .finishing operation');
     return;
-  }
+    }
 
-  //get file extension
-  var fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1);
+    //get file extension
+    var fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1);
 
-  switch(fileExtension){
-  case 'ipa':
-    util.log('Apple file type detected');
-    return 'ios';
-  case 'apk':
-    util.log('Android file type detected');
-    return 'android';
-  default:
-    util.log('Unknown file type');
-    return '';
-  }
+    switch(fileExtension){
+    case 'ipa':
+        util.log('Apple file type detected');
+        return 'ios';
+    case 'apk':
+        util.log('Android file type detected');
+        return 'android';
+    default:
+        util.log('Unknown file type');
+        return '';
+    }
 }
 
 
@@ -134,16 +131,16 @@ function getFileType(filePath){
  * @return {Object}      Application model, used by mongoose
  */
 function parseIpaFileInformation(data){
-  var fileObject = data[0];
+    var fileObject = data[0];
 
-  var application = new appModel({
-    title: fileObject['CFBundleIdentifier'],
-    type: 'ios',
-    version: fileObject['CFBundleVersion'],
-    filename: ''
-  });
+    var application = new appModel({
+        title: fileObject['CFBundleIdentifier'],
+        type: 'ios',
+        version: fileObject['CFBundleVersion'],
+        filename: ''
+    });
 
-  return application;
+    return application;
 };
 
 /**
@@ -152,16 +149,16 @@ function parseIpaFileInformation(data){
  * @return {Object}      Application model, used by mongoose
  */
 function parseApkFileInformation(data){
-  var fileObject = data.manifest[0];
+    var fileObject = data.manifest[0];
 
-  var application = new appModel({
-    title: fileObject['@package'],
-    type: 'android',
-    version: fileObject['@android:versionName'],
-    filename:''
-  });
+    var application = new appModel({
+        title: fileObject['@package'],
+        type: 'android',
+        version: fileObject['@android:versionName'],
+        filename:''
+    });
 
-  return application;
+    return application;
 };
 
 /**
@@ -170,20 +167,20 @@ function parseApkFileInformation(data){
  * @return {string}     path to file of the application in builds folder
  */
 function generateFileName(app){
-  var file_extension = '';
-  var date = new Date();
+    var file_extension = '';
+    var date = new Date();
 
-  if (app.type == 'ios'){
-    file_extension = '.ipa';
-  } else {
-    file_extension = '.apk';
-  }
+    if (app.type == 'ios'){
+        file_extension = '.ipa';
+    } else {
+        file_extension = '.apk';
+    }
 
-  //generating file name
-  var destination = './builds/' + app.title + '/' + date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear() + '/' +
-      app.type + '/' + app.title + file_extension;
+    //generating file name
+    var destination = './builds/' + app.title + '/' + date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear() + '/' +
+        app.type + '/' + app.title + file_extension;
 
-  return destination;
+    return destination;
 }
 
 //-------------EXPORTS----------------//
