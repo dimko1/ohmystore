@@ -16,8 +16,15 @@ module.exports = function(app, passport){
     //==========================================
     //Shows login page
     app.get('/login', function(req, res){
-        res.render('login.ejs');
+        res.render('login.ejs', { message: req.flash('loginMessage') });
     });
+
+
+    app.post('/login', passport.authenticate('app-login', {
+        successRedirect: '/profile',
+        failureRedirect: '/login',
+        failureFlash: true
+    }));
   
     //==========================================
     //LOGOUT 
@@ -29,12 +36,11 @@ module.exports = function(app, passport){
     });
     
     //==========================================
-    //LOGOUT 
+    //PROFILE
     //==========================================
-    //Pуrocesses logout message
+    //Process profile screen
     app.get('/profile', isLoggedIn, function(req,res){
-        res.logout();
-        res.redirect('profile.ejs');
+        res.render('profile.ejs');
     });
 };
 

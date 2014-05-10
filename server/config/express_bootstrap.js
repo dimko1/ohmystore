@@ -6,6 +6,9 @@ var path		= require('path');
 var util 		= require('util');
 var passport    = require('passport');
 var flash       = require('connect-flash');
+var partials    = require('express-partials');
+
+require('./passport_config')(passport);
 
 /**
  * used to start express application 
@@ -16,15 +19,18 @@ function start(config){
 
 	// all environments
 	app.set('port', process.env.PORT || 8080);
-	app.set('views', path.join(__dirname, 'views'));
+	app.set('views', path.join(__dirname, '/../views'));
 	app.set('view engine', 'ejs');
 	app.use(express.json());
-	app.use(express.urlencoded());
-	app.use(express.methodOverride());
+	app.use(partials());
+	app.use(express.cookieParser());
+	app.use(express.bodyParser());
+		
+
 	app.use(express.session({secret: 'thesecretphrase_wiskey'}));
 	
 	app.use(passport.initialize());
-	app.use(passport.session);
+	app.use(passport.session());
 
 	app.use(flash());
 

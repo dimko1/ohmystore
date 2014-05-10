@@ -8,7 +8,7 @@ module.exports = function(passport){
     /**
      * helper function to serialize user. quite simple now
      */
-    passport.serializer(function(user, callback){
+    passport.serializeUser(function(user, callback){
         callback(null, user.id);
     });
 
@@ -21,24 +21,23 @@ module.exports = function(passport){
         });
     });
   
-    //usage of the local storage
-    passport.use('login', new localStrategy({
-        usernameField:'email',
+    //usage of the local strategy
+    passport.use('app-login', new localStrategy({
+        usernameField:'username',
         passwordField:'password',
         passReqToCallback:true
     },
-  
-    function(req, email, password, callback){
-        user.findOne({'local.email' : email}, function(err,user){
+    
+
+    //check user
+    function(req, name, password, callback){
+        user.findOne({'local.name' : name}, function(err,user){
             if (err)
                 return callback(err);
-            //validate if user exists
-            if (!user)
-                return callback(null, false, req.flash('loginMessage', 'No user found'));
             
             //check password
-            if (!user.validPassword(password))
-                return callback(null, false, req.flash('logineMessage', 'Incorrect password'));
+            if (!user || !user.validPassword(password))
+                return callback(null, false, req.flash('loginMessage', 'Incorrect username or password'));
       
             //success!
             return callback(null, user);
