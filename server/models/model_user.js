@@ -8,7 +8,8 @@ var userSchema = Schema({
 	local:{
 		email: String,
 		password: String,
-		name: String
+		name: String,
+		role: String
 	}
 });
 

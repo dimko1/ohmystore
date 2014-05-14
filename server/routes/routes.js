@@ -31,7 +31,7 @@ module.exports = function(app, passport){
     //==========================================
     //Processes logout message
     app.get('/logout', function(req,res){
-        res.logout();
+        req.logout();
         res.redirect('/');
     });
     
@@ -40,7 +40,9 @@ module.exports = function(app, passport){
     //==========================================
     //Process profile screen
     app.get('/profile', isLoggedIn, function(req,res){
-        res.render('profile.ejs');
+        res.render('profile.ejs', {
+            user: req.user
+        });
     });
 };
 

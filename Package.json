@@ -24,7 +24,8 @@
     "chokidar":"latest",
     "bcrypt-nodejs":"~0.0.3",
     "passport-local" : "~0.1.6",
-    "connect-flash" : "~0.1.1"
+    "connect-flash" : "~0.1.1",
+    "connect-mongo" : "~0.4.1"
   },
 
   "engines" : {

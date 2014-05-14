@@ -7,6 +7,9 @@ var util 		= require('util');
 var passport    = require('passport');
 var flash       = require('connect-flash');
 var partials    = require('express-partials');
+var mongoStore  = require('connect-mongo')(express);
+
+var mongoose = require('mongoose');
 
 require('./passport_config')(passport);
 
@@ -25,9 +28,21 @@ function start(config){
 	app.use(partials());
 	app.use(express.cookieParser());
 	app.use(express.bodyParser());
-		
+	
 
-	app.use(express.session({secret: 'thesecretphrase_wiskey'}));
+	app.use(express.session({
+		secret:'ohmysecretphrase!',
+
+		//default max age to 30 days
+		maxAge: new Date(Date.now() + 3600000 * 24 * 30),
+		
+		//session management store
+		store: new mongoStore({
+			mongoose_connection: mongoose.connection
+		})
+	}));
+
+	//app.use(express.session({secret: 'thesecretphrase_wiskey'}));
 	
 	app.use(passport.initialize());
 	app.use(passport.session());

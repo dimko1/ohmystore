@@ -23,8 +23,9 @@ function createAdminAccount(){
         if (!err && !adminObject){
             var admin = new user({
                 local:{
-                    email:'admin@admin.com',
-                    name:'admin'
+                    email: 'admin@admin.com',
+                    name: 'admin',
+                    role: 'admin'
                 }
             });
             
