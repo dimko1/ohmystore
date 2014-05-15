@@ -1,0 +1,41 @@
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+	<!--navigation !-->
+	<ul class="nav navbar-nav">
+		
+		<!-- here and below check if page is active !-->
+		<li 
+			<% if (active == 'main') {%>
+			class="active"
+			<% } %>
+		>
+			<a href="/main">Applications</a>
+		</li>
+		
+		<% if (user.local.role == 'admin') {%>
+			<li
+				<% if (active == 'team') {%>
+				class="active"
+				<% } %>
+			>
+				<a href="/team">Team</a>
+			</li>
+		<% } %>
+
+		<li 
+			<% if (active == 'profile') {%>
+				class="active"
+			<% } %>
+		>
+			<a href="/profile">Profile</a>
+		</li>
+	</ul>
+
+	<!-- sign out button !-->
+  	<form class="navbar-form navbar-right" role="navigation">
+		<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+	</form>
+
+	<!-- Sign in message !-->
+  	<p class="navbar-text navbar-right">Signed in as <%= user.local.name %>          </p>
+
+</nav>

@@ -8,6 +8,12 @@ module.exports = function(app, passport){
     //==========================================
     //Shows index page
     app.get('/', function(req, res){
+        
+        //redirect user if he is already authenticated
+        if (req.isAuthenticated()){
+            return res.redirect('/main');
+        }
+
         res.render('index.ejs');
     });
     
@@ -21,7 +27,7 @@ module.exports = function(app, passport){
 
 
     app.post('/login', passport.authenticate('app-login', {
-        successRedirect: '/profile',
+        successRedirect: '/main',
         failureRedirect: '/login',
         failureFlash: true
     }));
@@ -39,11 +45,35 @@ module.exports = function(app, passport){
     //PROFILE
     //==========================================
     //Process profile screen
-    app.get('/profile', isLoggedIn, function(req,res){
-        res.render('profile.ejs', {
-            user: req.user
+    app.get('/main', isLoggedIn, function(req,res){
+        res.render('main.ejs', {
+            user: req.user,
+            active: req.active
         });
     });
+
+    //==========================================
+    //TEAM
+    //==========================================
+    //Process teams screen
+    app.get('/team', isLoggedIn, function(req,res){
+        res.render('team.ejs', {
+            user: req.user,
+            active: req.active
+        });
+    }); 
+
+    //==========================================
+    //Profile
+    //==========================================
+    //Process profile screen
+    app.get('/profile', isLoggedIn, function(req,res){
+        res.render('profile.ejs', {
+            user: req.user,
+            active: req.active
+        });
+    });      
+
 };
 
 /**

@@ -42,6 +42,11 @@ function start(config){
 		})
 	}));
 
+	app.use(function(req, res, next){
+    	req.active = req.path.split('/')[1] // [0] will be empty since routes start with '/'
+    	next();
+	});
+
 	//app.use(express.session({secret: 'thesecretphrase_wiskey'}));
 	
 	app.use(passport.initialize());
