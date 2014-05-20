@@ -1,3 +1,6 @@
+var profile_controller = require('./../controllers/profile_controller');
+
+
 /**
  * Routing information
  */
@@ -25,7 +28,10 @@ module.exports = function(app, passport){
         res.render('login.ejs', { message: req.flash('loginMessage') });
     });
 
-
+    //==========================================
+    //LOGIN PAGE
+    //==========================================
+    //Handles login method
     app.post('/login', passport.authenticate('app-login', {
         successRedirect: '/main',
         failureRedirect: '/login',
@@ -70,9 +76,27 @@ module.exports = function(app, passport){
     app.get('/profile', isLoggedIn, function(req,res){
         res.render('profile.ejs', {
             user: req.user,
+            active: req.active,
+            message: req.flash('loginMessage')
+        });
+    });
+
+    //==========================================
+    //Profile
+    //==========================================
+    //Process profile screen
+    app.post('/update_profile', isLoggedIn, function(req,res){
+        res.render('profile.ejs', {
+            user: req.user,
             active: req.active
         });
-    });      
+    });
+
+    //==========================================
+    //Profile
+    //==========================================
+    //Process profile screen
+    app.post('/change_password', isLoggedIn, profile_controller.change_password);      
 
 };
 

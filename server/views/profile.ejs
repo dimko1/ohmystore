@@ -1,1 +1,47 @@
 <% include menus/header %>
+
+<!-- views/profiel.ejs -->
+<div class="container">
+
+	<div class="col-sm-6 col-sm-offset-3">
+
+		<h1><span class="fa fa-sign-in"></span>  Update Info</h1>
+
+		<!-- show any messages that come back with authentication -->
+		<% if (message.length > 0) { %>
+			<div class="alert alert-danger"><%= message %></div>
+		<% } %>
+
+		<!-- LOGIN FORM -->
+		<form action="/update_profile" method="post">
+			<div class="form-group">
+				<label>Email</label>
+				<input type="text" class="form-control" name="email">
+			</div>
+
+			<div class="form-group">
+				<label>Username</label>
+				<input type="text" class="form-control" name="username">
+			</div>
+
+			<button type="submit" class="btn btn-warning btn-lg">Update</button>
+		</form>
+
+
+		<form action="/change_password" method="post">			
+			<div class="form-group">
+				<label>Old Password</label>
+				<input type="password" class="form-control" name="old_password">
+			</div>
+
+			<div class="form-group">
+				<label>New Password</label>
+				<input type="password" class="form-control" name="new_password">
+			</div>
+
+			<button type="submit" class="btn btn-warning btn-lg">Change Password</button>
+		</form>
+	
+	</div>
+
+</div>
